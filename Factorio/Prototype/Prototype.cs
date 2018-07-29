@@ -13,8 +13,13 @@ namespace Factorio.Prototype
 	/// <summary>
 	/// The abstract base for all prototypes. All prototypes inherit from this prototype.
 	/// </summary>
-	public abstract class Prototype : ILUAConvertable
+	public abstract class Prototype : ILUAConvertable, INotifyPropertyChanged
 	{
+		public static event PrototypeCreatedHandler PrototypeCreated;
+		public static event PrototypeDestroyedHandler PrototypeDestroyed;
+
+		private static List<Prototype> _instances = new List<Prototype>();
+
 		private string _type;
 		private string _name;
 		private string _order;
@@ -23,12 +28,27 @@ namespace Factorio.Prototype
 
 		public Prototype()
 		{
+			_instances.Add(this);
 			_type = "";
 			_name = "";
 			_order = "";
 			_localised_name = "";
 			_localised_description = "";
+			PrototypeCreated?.Invoke(this);
 		}
+
+		~Prototype()
+		{
+			_instances.Remove(this);
+			PrototypeDestroyed?.Invoke(this);
+		}
+
+		public static List<Prototype> GetInstances()
+		{
+			return _instances;
+		}
+
+		#region Public Properties
 
 		[Category("Mandatory")]
 		[Description("Specification of the type of the prototype.\r\nFor a list of all available types and their properties, see prototype definitions https://wiki.factorio.com/Prototype_definitions \r\nFor a list of all types used in vanilla, see data.raw https://wiki.factorio.com/Data.raw.")]
@@ -81,6 +101,7 @@ namespace Factorio.Prototype
 					throw new Exception("The name of a Prototype cannot contain a \".\".");
 				}
 				_name = CapStringLength(value, 200);
+				Notify("name");
 			}
 		}
 
@@ -105,6 +126,7 @@ namespace Factorio.Prototype
 			set
 			{
 				_order = CapStringLength(value, 200);
+				Notify("order");
 			}
 		}
 
@@ -127,6 +149,7 @@ namespace Factorio.Prototype
 			set
 			{
 				_localised_name = value;
+				Notify("localised_name");
 			}
 		}
 
@@ -149,8 +172,11 @@ namespace Factorio.Prototype
 			set
 			{
 				_localised_description = value;
+				Notify("localised_description");
 			}
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Generates the lua code for this prototype.
@@ -169,6 +195,15 @@ namespace Factorio.Prototype
 			}
 			code += "\t\t}\r\n\t}\r\n)";
 			return code;
+		}
+
+		[Browsable(false)]
+		public string LuaCode
+		{
+			get
+			{
+				return GetLuaCode();
+			}
 		}
 
 		private string ReadPropertyValue(PropertyInfo p)
@@ -269,7 +304,24 @@ namespace Factorio.Prototype
 			}
 			return value;
 		}
+
+
+		#region INotifyPropertyChanged implementation
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void Notify(string propertyName)
+		{
+			if (this.PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		#endregion INotifyPropertyChanged implementation
 	}
+
+	public delegate void PrototypeCreatedHandler(Prototype newPrototype);
+	public delegate void PrototypeDestroyedHandler(Prototype destroyedPrototype);
 
 	internal class OptionalAttribute : Attribute
 	{

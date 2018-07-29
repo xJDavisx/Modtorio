@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Text;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-namespace Factorio.Prototype.Item
+namespace Factorio.Prototype
 {
     public class Item : Prototype
     {

@@ -10,13 +10,15 @@
         Title="frmMain" Height="571.536" Width="842.021" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <!-- Having CommandParameter is crucial here -->
-        <ContextMenu x:Key="contextMenu">
+        <ContextMenu x:Key="contextMenuInstance">
             <MenuItem Header="ViewCode"
-                      Click="mnuViewCode_Click"
-                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
+                      Click="mnuViewCode_Click"/>
             <MenuItem Header="Delete"
-                      Click="mnuDelete_OnClick"
-                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
+                      Click="mnuDelete_OnClick"/>
+        </ContextMenu>
+        <ContextMenu x:Key="contextMenuType">
+            <MenuItem Header="Create New"
+                      Click="mnuCreateNew_Click"/>
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -35,7 +37,7 @@
         </Menu>
         <avalonDock:DockingManager x:Name="dockMain" Grid.Row="1">
             <avalonDock:DockingManager.Theme>
-                <avalonDock:VS2010Theme/>
+                <avalonDock:MetroTheme/>
             </avalonDock:DockingManager.Theme>
             <avalonDock:LayoutRoot>
                 <avalonDock:LayoutPanel>
@@ -43,9 +45,7 @@
                         <avalonDock:LayoutAnchorablePane>
                             <avalonDock:LayoutAnchorable Title="Entities" ContentId="Entities">
                                 <Grid>
-                                    <ComboBox x:Name="cboTypeList" VerticalAlignment="Top" SelectionChanged="cboTypeList_SelectionChanged"/>
-                                    <Button x:Name="btnCreate" Content="Create" VerticalAlignment="Top" Click="btnCreate_Click" IsEnabled="False" Margin="0,27,0,0" Height="20"/>
-                                    <ListBox x:Name="lstCreatedTypes" ItemsSource="{Binding created_prototypes}" SelectionChanged="lstCreatedTypes_SelectionChanged" Margin="0,52,0,0" ContextMenu="{DynamicResource contextMenu}"/>
+                                    <TreeView x:Name="treeEntities" Margin="0,0,0,0" Grid.Row="1"/>
                                 </Grid>
                             </avalonDock:LayoutAnchorable>
                         </avalonDock:LayoutAnchorablePane>
@@ -55,7 +55,7 @@
                     <avalonDock:LayoutAnchorablePaneGroup DockWidth="150">
                         <avalonDock:LayoutAnchorablePane>
                             <avalonDock:LayoutAnchorable Title="Properties" ContentId="Properties">
-                                <xctk:PropertyGrid SelectedObject="{Binding selected_prototype}"/>
+                                <xctk:PropertyGrid x:Name="propertyGrid" SelectedObject="{Binding selected_prototype}"/>
                             </avalonDock:LayoutAnchorable>
                         </avalonDock:LayoutAnchorablePane>
                     </avalonDock:LayoutAnchorablePaneGroup>
