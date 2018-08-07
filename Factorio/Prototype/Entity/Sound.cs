@@ -27,12 +27,12 @@ namespace Factorio.Prototype.Entity
 		/// The volume.
 		/// </value>
 		[Mandatory]
-		public uint volume
+		public double volume
 		{
 			get; set;
 		}
 
-		public Sound(string filename, uint volume)
+		public Sound(string filename, double volume)
 		{
 			this.filename = filename;
 			this.volume = volume;
@@ -41,10 +41,11 @@ namespace Factorio.Prototype.Entity
 		public Sound()
 		{
 		}
+
 		public override string ToString()
 		{
 			string s = "Sound: ";
-			s += GetLuaValue().Replace("\r\n","");
+			s += GetLuaValue().Replace("\r\n","").Replace("\t", "");
 			return s;
 		}
 
@@ -53,14 +54,14 @@ namespace Factorio.Prototype.Entity
 			if (filename == null || filename == "")
 			{
 #if DEBUG
-				filename = "__MODNAME__/debug_sample.ogg";
+				filename = "__base__/sound/machine-open.ogg";
 
 #endif
 #if !DEBUG
 				throw new Exception("filename can't be null or empty.");
 #endif
 			}
-			return "{\r\nfilename = \"" + filename + "\",\r\nvolume = " + volume.ToString() + "\r\n}";
+			return "\r\n\t\t\t{\r\n\t\t\t\tfilename = \"" + filename + "\",\r\n\t\t\t\tvolume = " + volume.ToString() + "\r\n\t\t\t}";
 		}
 	}
 }

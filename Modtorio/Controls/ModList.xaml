@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="Modtorio.Controls.ModList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:local="clr-namespace:Modtorio.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450">
+    <Grid Background="White" Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <telerik:Label Content="Search" Grid.Column="0" Grid.Row="0"/>
+            <telerik:RadAutoCompleteBox x:Name="txtSearch" Grid.Column="1" Grid.Row="0" SearchTextChanged="txtSearch_SearchTextChanged"/>
+
+            <telerik:Label Content="Sort By" Grid.Column="0" Grid.Row="1"/>
+            <telerik:RadComboBox x:Name="cboSortBy" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Width="auto" SelectionChanged="cboSortBy_SelectionChanged">
+            </telerik:RadComboBox>
+            
+            <telerik:Label Content="Group By" Grid.Column="0" Grid.Row="2"/>
+            <telerik:RadComboBox x:Name="cboGroupBy" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" Width="auto" SelectionChanged="cboGroupBy_SelectionChanged">
+            </telerik:RadComboBox>
+
+        </Grid>
+        <telerik:RadTreeView x:Name="treeModList" Margin="0,0,0,0" Grid.Row="1"/>
+    </Grid>
+</UserControl>

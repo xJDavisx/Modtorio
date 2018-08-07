@@ -16,6 +16,9 @@ namespace Modtorio
 	public delegate void AllModsLoadedHandler();
 	public class Mod
 	{
+		private System.IO.DirectoryInfo backupDir;
+		public System.IO.DirectoryInfo workingDir;
+
 		static List<Mod> mods = new List<Mod>();
 		public static event ModLoadedHandler ModLoaded;
 		public static event ModLoadFailedHandler ModLoadFailed;
@@ -146,6 +149,15 @@ namespace Modtorio
 				enabled = value;
 			}
 		}
+		public bool IsOpen
+		{
+			get; set;
+		}
+		public System.IO.FileInfo ZipFile
+		{
+			get;
+			private set;
+		}
 
 		public static int NumModsLoaded
 		{
@@ -163,6 +175,8 @@ namespace Modtorio
 			var zipFiles = (new System.IO.DirectoryInfo(Properties.Settings.Default.ModDirectory)).GetFiles().Where(x => x.Extension.ToLower() == ".zip");
 			modsFound = zipFiles.Count();
 			File.Log("Mods found: " + modsFound);
+			if (modsFound == 0)
+				throw new Exception();
 			bgwLoad.DoWork += bgwLoad_DoWork;
 			bgwLoad.ProgressChanged += BgwLoad_ProgressChanged;
 			bgwLoad.RunWorkerCompleted += BgwLoad_RunWorkerCompleted;
@@ -199,36 +213,61 @@ namespace Modtorio
 			AllModsLoaded?.Invoke();
 		}
 
+		public void Open()
+		{
+			if (!IsOpen)
+			{
+				IsOpen = true;
+				backupDir = new System.IO.DirectoryInfo(Properties.Settings.Default.BackupDirectory + "\\" + DateTime.Now.ToFileTime() + "\\");
+				workingDir = new System.IO.DirectoryInfo(Properties.Settings.Default.WorkingDirectory + "\\" + ZipFile.Name.Replace(".zip", ""));
+				if (workingDir.Exists)
+					workingDir.Delete(true);
+				if (!backupDir.Exists)
+					backupDir.Create();
+				ZipFile.CopyTo(backupDir.FullName + "\\" + ZipFile.Name);
+				Jesse.IO.File.Log("Trying to load info on zip file " + ZipFile.Name);
+				System.IO.Compression.ZipFile.ExtractToDirectory(ZipFile.FullName, Properties.Settings.Default.WorkingDirectory);
+			}
+		}
+
 		private static void bgwLoad_DoWork(object sender, DoWorkEventArgs e)
 		{
-			ModList mlst = JsonConvert.DeserializeObject<ModList>(new System.IO.FileInfo(Properties.Settings.Default.ModDirectory +
-				"\\mod-list.json").OpenText().ReadToEnd());
-			IEnumerable<System.IO.FileInfo> zipFiles = (IEnumerable<System.IO.FileInfo>)e.Argument;
-			foreach (System.IO.FileInfo fi in zipFiles)
+			try
 			{
-				Mod m = null;
-				try
+				ModList mlst = JsonConvert.DeserializeObject<ModList>(new System.IO.FileInfo(Properties.Settings.Default.ModDirectory +
+					"\\mod-list.json").OpenText().ReadToEnd());
+				IEnumerable<System.IO.FileInfo> zipFiles = (IEnumerable<System.IO.FileInfo>)e.Argument;
+				foreach (System.IO.FileInfo fi in zipFiles)
 				{
-					Jesse.IO.File.Log("Trying to load info on zip file " + fi.Name);
-					var z = new ZipArchive(fi.OpenRead());
-					ZipArchiveEntry info = z.Entries.Single(x => x.FullName.ToLower() == fi.Name.ToLower().Replace(".zip", "") + "/info.json");
-					System.IO.StreamReader sr = new System.IO.StreamReader(info.Open(), true);
-					string s = sr.ReadToEnd();
-					sr.Close();
-					m = JsonConvert.DeserializeObject<Mod>(s);
-					m.Enabled = mlst.mods.Single(x => x.name == m.Name).enabled;
+					Mod m = null;
+					try
+					{
+						Jesse.IO.File.Log("Trying to load info on zip file " + fi.Name);
+						var z = new ZipArchive(fi.OpenRead());
+						ZipArchiveEntry info = z.Entries.Single(x => x.FullName.ToLower() == fi.Name.ToLower().Replace(".zip", "") + "/info.json");
+						System.IO.StreamReader sr = new System.IO.StreamReader(info.Open(), true);
+						string s = sr.ReadToEnd();
+						sr.Close();
+						m = JsonConvert.DeserializeObject<Mod>(s);
+						m.Enabled = mlst.mods.Single(x => x.name == m.Name).enabled;
+						m.ZipFile = fi;
+					}
+					catch (Exception ex)
+					{
+						string message = "Failed to load mod file " + fi.FullName + ". Message: " + ex.Message;
+						bgwLoad.ReportProgress(0, message);
+						File.Log(message);
+						continue;
+					}
+					Mods.Add(m);
+					bgwLoad.ReportProgress(0, m);
+					File.Log("Loaded mod info for mod " + m.Name);
+					System.Threading.Thread.Sleep(10);
 				}
-				catch (Exception ex)
-				{
-					string message = "Failed to load mod file " + fi.FullName + ". Message: " + ex.Message;
-					bgwLoad.ReportProgress(0, message);
-					File.Log(message);
-					continue;
-				}
-				Mods.Add(m);
-				bgwLoad.ReportProgress(0, m);
-				File.Log("Loaded mod info for mod " + m.Name);
-				System.Threading.Thread.Sleep(10);
+			}
+			catch
+			{
+				return;
 			}
 		}
 	}

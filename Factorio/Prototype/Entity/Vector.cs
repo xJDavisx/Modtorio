@@ -29,7 +29,7 @@
 
 		public override string ToString()
 		{
-			return GetLuaValue();
+			return "Vector: " + GetLuaValue();
 		}
 	}
 }

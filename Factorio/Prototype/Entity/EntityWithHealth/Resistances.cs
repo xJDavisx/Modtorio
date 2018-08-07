@@ -39,7 +39,7 @@
 		public override string ToString()
 		{
 			string s = "Resistance: ";
-			s += GetLuaValue();
+			s += GetLuaValue().Replace("\r\n", "").Replace("\t", "");
 			return s;
 		}
 

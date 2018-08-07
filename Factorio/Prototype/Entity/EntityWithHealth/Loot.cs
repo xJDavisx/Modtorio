@@ -27,9 +27,10 @@
 		public override string ToString()
 		{
 			string s = "Loot: ";
-			s += GetLuaValue();
+			s += GetLuaValue().Replace("\r\n", "").Replace("\t", "");
 			return s;
 		}
+
 		public string GetLuaValue()
 		{
 

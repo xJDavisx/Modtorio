@@ -143,7 +143,7 @@ namespace Factorio.Prototype.Entity.EntityWithHealth
 
 		[Category("Optional")]
 		[Description("")]
-		[ExpandableObject]
+		
 		[Optional]
 		public Sound repair_sound
 		{

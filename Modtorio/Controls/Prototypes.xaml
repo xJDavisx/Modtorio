@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Modtorio.Controls.Prototypes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:local="clr-namespace:Modtorio.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450">
+    <UserControl.Resources>
+        <ContextMenu x:Key="contextMenuInstance">
+            <MenuItem Header="ViewCode"
+                      Click="mnuViewCode_Click"/>
+            <MenuItem Header="Delete"
+                      Click="mnuDelete_OnClick"/>
+        </ContextMenu>
+        <ContextMenu x:Key="contextMenuType">
+            <MenuItem Header="Create New"
+                      Click="mnuCreateNew_Click"/>
+        </ContextMenu>
+    </UserControl.Resources>
+    <Grid Background="White" Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <telerik:Label Content="Search" Grid.Column="0" Grid.Row="0"/>
+            <telerik:RadAutoCompleteBox x:Name="txtSearch" Grid.Column="1" Grid.Row="0" SearchTextChanged="txtSearch_SearchTextChanged"/>
+
+        </Grid>
+        <telerik:RadTreeView x:Name="treePrototypes" Margin="0,0,0,0" Grid.Row="1"/>
+    </Grid>
+</UserControl>

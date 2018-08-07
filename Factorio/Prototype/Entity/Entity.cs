@@ -16,7 +16,7 @@ namespace Factorio.Prototype.Entity
 		private BoundingBox _selection_box = new BoundingBox();
 		private BoundingBox _drawing_box = new BoundingBox();
 		private BoundingBox _sticker_box = new BoundingBox();
-		private EntityPrototypeFlags _flags = new EntityPrototypeFlags();
+		private List<EntityPrototypeFlags> _flags = new List<EntityPrototypeFlags>();
 		private Minable _minable = new Minable();
 		private string _subgroup = "";
 		private bool _allow_copy_paste = true;
@@ -64,6 +64,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_icons = value;
+				Notify("icons");
 			}
 		}
 
@@ -83,7 +84,7 @@ namespace Factorio.Prototype.Entity
 		"Note, that for buildings, it is custom to leave 0.1 wide border between the edge of the tile and the edge of the building, this lets the player move between the building and electric poles/inserters etc.")]
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public BoundingBox collision_box
 		{
 			get
@@ -94,6 +95,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_collision_box = value;
+				Notify("collision_box");
 			}
 		}
 
@@ -105,7 +107,7 @@ namespace Factorio.Prototype.Entity
 		"Two entities can collide only if they share a layer from the collision mask.")]
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public CollisionMask collision_mask
 		{
 			get
@@ -116,6 +118,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_collision_mask = value;
+				Notify("collision_mask");
 			}
 		}
 
@@ -129,7 +132,7 @@ namespace Factorio.Prototype.Entity
 		"The selection box is usualy a little bit bigger than the collision box, for tilable entities (like buildings) it should match the tile size of the building.")]
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public BoundingBox selection_box
 		{
 			get
@@ -140,6 +143,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_selection_box = value;
+				Notify("selection_box");
 			}
 		}
 
@@ -153,7 +157,7 @@ namespace Factorio.Prototype.Entity
 		"This is used to calculate the correct zoom and positioning in the entity info gui.")]
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public BoundingBox drawing_box
 		{
 			get
@@ -164,6 +168,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_drawing_box = value;
+				Notify("drawing_box");
 			}
 		}
 
@@ -175,7 +180,7 @@ namespace Factorio.Prototype.Entity
 		"Used to set the area of the entity that can have stickers on it, currently only used for units to specify the area where the green slow down stickers can appear. It is optional and the collision box is used when not specified.")]
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public BoundingBox sticker_box
 		{
 			get
@@ -186,6 +191,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_sticker_box = value;
+				Notify("sticker_box");
 			}
 		}
 
@@ -195,8 +201,8 @@ namespace Factorio.Prototype.Entity
 		[Description("Default: nil")]
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
-		public EntityPrototypeFlags flags
+		
+		public List<EntityPrototypeFlags> flags
 		{
 			get
 			{
@@ -206,6 +212,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_flags = value;
+				Notify("flags");
 			}
 		}
 
@@ -215,7 +222,7 @@ namespace Factorio.Prototype.Entity
 		[Description("Default: {hardness = 0, minable = false, mining_time = 0}")]
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public Minable minable
 		{
 			get
@@ -226,6 +233,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_minable = value;
+				Notify("minable");
 			}
 		}
 
@@ -245,6 +253,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_subgroup = value;
+				Notify("subgroup");
 			}
 		}
 
@@ -261,6 +270,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_allow_copy_paste = value;
+				Notify("allow_copy_paste");
 			}
 		}
 
@@ -277,6 +287,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_selectable_in_game = value;
+				Notify("selectable_in_game");
 			}
 		}
 
@@ -296,6 +307,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_selection_priority = value;
+				Notify("selection_priority");
 			}
 		}
 
@@ -315,6 +327,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_emissions_per_tick = value;
+				Notify("emissions_per_tick");
 			}
 		}
 
@@ -334,13 +347,14 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_shooting_cursor_size = value;
+				Notify("shooting_cursor_size");
 			}
 		}
 
 
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public Sound build_sound
 		{
 			get
@@ -351,13 +365,14 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_build_sound = value;
+				Notify("build_sound");
 			}
 		}
 
 
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public Sound mined_sound
 		{
 			get
@@ -368,13 +383,14 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_mined_sound = value;
+				Notify("mined_sound");
 			}
 		}
 
 
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public Sound vehicle_impact_sound
 		{
 			get
@@ -385,13 +401,14 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_vehicle_impact_sound = value;
+				Notify("vehicle_impact_sound");
 			}
 		}
 
 
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public Sound open_sound
 		{
 			get
@@ -402,13 +419,14 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_open_sound = value;
+				Notify("open_sound");
 			}
 		}
 
 
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public Sound close_sound
 		{
 			get
@@ -419,6 +437,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_close_sound = value;
+				Notify("close_sound");
 			}
 		}
 
@@ -435,13 +454,14 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_build_base_evolution_requirement = value;
+				Notify("build_base_evolution_requirement");
 			}
 		}
 
 
 		[Category("Optional")]
 		[Optional]
-		[ExpandableObject]
+		
 		public Vector alert_icon_shift
 		{
 			get
@@ -452,6 +472,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_alert_icon_shift = value;
+				Notify("alert_icon_shift");
 			}
 		}
 
@@ -468,6 +489,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_alert_icon_scale = value;
+				Notify("alert_icon_scale");
 			}
 		}
 
@@ -517,6 +539,7 @@ namespace Factorio.Prototype.Entity
 			set
 			{
 				_fast_replaceable_group = value;
+				Notify("fast_replaceable_group");
 			}
 		}
 	}

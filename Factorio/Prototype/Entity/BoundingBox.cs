@@ -10,10 +10,10 @@ namespace Factorio.Prototype.Entity
 	/// <seealso cref="Factorio.Prototype.ILUAType" />
 	public class BoundingBox : ILUAType
 	{
-		[ExpandableObject]
+		
 		public Position TopLeft{get;set;}
 
-		[ExpandableObject]
+		
 		public Position BottomRight
 		{
 			get; set;

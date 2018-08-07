@@ -42,7 +42,7 @@ namespace Factorio.Prototype.Entity
 			set;
 		}
 
-		[ExpandableObject]
+		
 		/// <summary>
 		/// Tint of the icon.
 		/// Default: {r=0, g=0, b=0, a=1}
@@ -57,7 +57,7 @@ namespace Factorio.Prototype.Entity
 		} = new Color();
 
 
-		[ExpandableObject]
+		
 		/// <summary>
 		/// Used to offset the icon "layer" from the overall icon.
 		/// Default: {0, 0}

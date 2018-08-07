@@ -2,40 +2,48 @@
 
 namespace Factorio.Prototype.Entity
 {
-	/// <summary>
-	/// Entity flags. More Info: https://wiki.factorio.com/Types/EntityPrototypeFlags
-	/// </summary>
-	/// <seealso cref="Factorio.Prototype.ILUAType" />
-	public class EntityPrototypeFlags : ILUAType
+	public class EntityPrototypeFlags
 	{
-		public List<string> flags
+		string _value = "";
+
+		public EntityPrototypeFlags()
 		{
-			get; set;
+
 		}
 
-		public EntityPrototypeFlags(List<string> flags = null)
+		public EntityPrototypeFlags(string value)
 		{
-			this.flags = flags;
-			if(this.flags == null)
+			this._value = value;
+		}
+
+		public static implicit operator string(EntityPrototypeFlags s)
+		{
+			return s.ToString();
+		}
+
+		public static implicit operator EntityPrototypeFlags(string s)
+		{
+			return new EntityPrototypeFlags(s);
+		}
+
+		public string Value
+		{
+			get
 			{
-				this.flags = new List<string>();
+				return this._value;
 			}
-		}
-
-		public string GetLuaValue()
-		{
-			string c = "{";
-
-			for (int i = 0; i < flags.Count; i++)
+			set
 			{
-				if (i > 0)
+				if (this._value != value)
 				{
-					c += ", ";
+					this._value = value;
 				}
-				c += "\"" + flags[i] + "\"";
 			}
-			c += "}";
-			return c;
+		}
+
+		public override string ToString()
+		{
+			return _value.ToString();
 		}
 	}
 }

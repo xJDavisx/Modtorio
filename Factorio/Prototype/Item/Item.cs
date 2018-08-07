@@ -333,7 +333,7 @@ namespace Factorio.Prototype
 		"Colors the glow of the burner energy source when this fuel is burned.")]
 		[Optional]
 		[Category("Optional")]
-		[ExpandableObject]
+		
 		public Color fuel_glow_color
 		{
 			get
